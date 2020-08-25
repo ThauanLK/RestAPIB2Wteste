@@ -4,6 +4,9 @@ exports.getPosts = (req, res, next) => {
   });
 };
 
+cons
+
+
 exports.createPost = (req, res, next) => {
   const namePlanet = req.body.namePlanet;
   const firstAparation = req.body.firstAparation;
