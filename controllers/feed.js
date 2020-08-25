@@ -1,14 +1,14 @@
 exports.getPosts = (req, res, next) => {
   res.status(200).json({
-    posts: [{ id, nomeDoPlaneta }],
+    posts: [{ namePlanet: "Bespin", firstAparation: "Episódio 5" }],
   });
 };
 
 exports.createPost = (req, res, next) => {
-  const namePlanet = req.body.title;
-
+  const title = req.body.title;
+  const content = req.body.content;
   res.status(201).json({
     message: "Planeta adicionado com sucesso.",
-    post: { id: new Date().toISOString, nomeDoPlaneta: namePlanet },
+    post: { id: new Date().toISOString, title: title, content: content },
   });
 };
