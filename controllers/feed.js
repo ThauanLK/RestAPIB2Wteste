@@ -5,10 +5,14 @@ exports.getPosts = (req, res, next) => {
 };
 
 exports.createPost = (req, res, next) => {
-  const title = req.body.title;
-  const content = req.body.content;
+  const namePlanet = req.body.namePlanet;
+  const firstAparation = req.body.firstAparation;
   res.status(201).json({
     message: "Planeta adicionado com sucesso.",
-    post: { id: new Date().toISOString, title: title, content: content },
+    post: {
+      id: new Date().toISOString,
+      namePlanet: namePlanet,
+      firstAparation: firstAparation,
+    },
   });
 };
