@@ -1,15 +1,11 @@
 const { validationResult } = require("express-validator/check");
 const Planet = require("../models/planets");
 
-exports.getPosts = (req, res, next) => {
+//Listando os planetas
+exports.getPosts = async (req, res, next) => {
+  const data = await Planet.find({});
   res.status(200).json({
-    posts: [
-      {
-        namePlanet: "Bespin",
-        episode: "Episódio 5",
-        description: "Um planeta gasoso",
-      },
-    ],
+    data,
   });
 };
 
@@ -19,12 +15,14 @@ exports.createPost = (req, res, next) => {
   const descripiton = req.body.description;
   const episode = req.body.episode;
 
+  //criando um planeta novo
   const planet = new Planet({
     namePlanet: namePlanet,
     description: descripiton,
     episode: episode,
   });
 
+  //Salvando o planeta no db
   planet.save().then((result) => {
     res
       .status(201)
@@ -33,7 +31,6 @@ exports.createPost = (req, res, next) => {
         post: result,
       })
       .catch((err) => console.log(err));
-    //Criação do planeta no db
     if (!errors.isEmpty) {
       return res.status(422).json({
         message: "Não foi possível adicionar o planeta",
