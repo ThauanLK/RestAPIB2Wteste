@@ -10,7 +10,15 @@ const mongoConnect = (callback) => {
       _db = client.db();
       callback(client);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      throw err;
+    });
 };
 
-module.exports = mongoConnect;
+const getDb = () => {
+  if (_db) return _db;
+  throw "Banco de Dados não encontrado";
+};
+
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;
