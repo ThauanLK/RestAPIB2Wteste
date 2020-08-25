@@ -4,10 +4,19 @@ exports.getPosts = (req, res, next) => {
   });
 };
 
-cons
-
+const { validationResult } = require("express-validator/check");
 
 exports.createPost = (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty) {
+    return res
+      .status(422)
+      .json({
+        message: "Não foi possível adicionar o planeta",
+        errors: errors.array,
+      });
+  }
   const namePlanet = req.body.namePlanet;
   const firstAparation = req.body.firstAparation;
   res.status(201).json({
