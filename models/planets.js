@@ -1,13 +1,23 @@
-const mongoConnect = require("../util/database");
+const mongoose = require("mongoose");
+const { Timestamp } = require("mongodb");
+const Schema = mongoose.Schema;
 
-class Planets {
-  constructor(name, description, episode) {
-    this.name = name;
-    this.description = description;
-    this.episode = episode;
-  }
+const planetSchema = new Schema(
+  {
+    namePlanet: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      require: true,
+    },
+    episode: {
+      type: String,
+      require: true,
+    },
+  },
+  (Timestamp = true)
+);
 
-  save() {}
-}
-
-module.exports = Planets;
+module.exports = mongoose.model("Planet", planetSchema);

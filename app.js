@@ -1,8 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const feedRouter = require("./routes/feed");
-const mongoConnect = require("./util/database");
+const mongoose = require("mongoose");
 const app = express();
 
 app.use(bodyParser.json());
@@ -15,9 +14,10 @@ app.use((req, res, next) => {
 });
 
 app.use("/feed", feedRouter);
-mongoose.connect("");
 
-mongoConnect((client) => {
-  console.log(client);
-  app.listen(8080);
-});
+mongoose
+  .connect(
+    "mongodb+srv://tholiveira:Akmv1j1nY0WW3CRp@cluster0.69gso.gcp.mongodb.net/planets?retryWrites=true&w=majority"
+  )
+  .then(app.listen(8080))
+  .catch((err) => console.log(err));

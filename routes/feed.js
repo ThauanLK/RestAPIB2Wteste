@@ -9,7 +9,11 @@ router.get("/posts", feedController.getPosts);
 //POST /feed/post
 router.post(
   "/post",
-  [body("namePlanet").trim().isLength({ min: 5 })],
+  [
+    body("namePlanet").trim().isLength({ min: 5 }),
+    body("description").trim().isLength({ min: 5 }),
+    body("episode").trim().isLength({ min: 5 }),
+  ],
   feedController.createPost
 );
 
