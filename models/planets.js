@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { Timestamp } = require("mongodb");
 const Schema = mongoose.Schema;
 
 const planetSchema = new Schema(
@@ -17,7 +16,7 @@ const planetSchema = new Schema(
       require: true,
     },
   },
-  (Timestamp = true)
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Planet", planetSchema);
