@@ -3,10 +3,10 @@ const { body } = require("express-validator/check");
 const feedController = require("../controllers/feed");
 const router = express.Router();
 
-//GET /feed/posts
+//GET /feed/planetas
 router.get("/planetas", feedController.getPosts);
 
-//POST /feed/post
+//POST /feed/post_planeta
 router.post(
   "/post_planeta",
   [
@@ -16,5 +16,7 @@ router.post(
   ],
   feedController.createPost
 );
+
+router.get("/planetas/:planetID", feedController.getPlanetByID);
 
 module.exports = router;

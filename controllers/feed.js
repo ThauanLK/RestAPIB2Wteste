@@ -53,3 +53,22 @@ exports.createPost = (req, res, next) => {
       });
   });
 };
+
+exports.getPlanetByID = (req, res, next) => {
+  const planetID = req.params.planetID;
+  Planet.findById(planetID)
+    .then((planet) => {
+      if (!planet) {
+        const error = new Error("Planeta não encontrado");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ planet: planet });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(500);
+    });
+};
