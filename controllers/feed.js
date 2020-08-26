@@ -1,15 +1,16 @@
-const { validationResult } = require("express-validator/check");
+const { validationResult } = require("express-validator");
 const Planet = require("../models/planets");
 
 //Listando os planetas
-exports.getPosts = (req, res, next) => {
-  Planet.find()
-    .then((planets) =>
-      res.status(200).json({
-        planets,
-      })
-    )
-    .catch((err) => errorHandler(err));
+exports.getPosts = async (req, res, next) => {
+  try {
+    const planets = await Planet.find();
+    res.status(200).json({
+      planets,
+    });
+  } catch (err) {
+    errorHandler(err);
+  }
 };
 
 exports.createPost = (req, res, next) => {
