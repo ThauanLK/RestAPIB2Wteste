@@ -73,7 +73,7 @@ exports.deletePlanet = async (req, res, next) => {
   try {
     const planetWillDeletedfinded = await Planet.findById(planetID);
     if (!planetWillDeletedfinded) {
-      const error = new Error("Planeta não encontrado");
+      const error = new Error("Not Found.");
       error.statusCode = 404;
       throw error;
     }
@@ -85,9 +85,9 @@ exports.deletePlanet = async (req, res, next) => {
 };
 
 exports.searchPlanet = async (req, res, next) => {
-  const searchParams = req.body.namePlanet;
+  const namePlanet = req.query.namePlanet;
   try {
-    const planetSearched = await Planet.find({ namePlanet: searchParams });
+    const planetSearched = await Planet.find({ PlanetsFounded: namePlanet });
     res.status(200).json({ planetSearched });
   } catch (err) {
     errorHandler(err, next);

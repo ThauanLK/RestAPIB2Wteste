@@ -4,11 +4,11 @@ const feedController = require("../controllers/feed");
 const router = express.Router();
 
 //GET /feed/planetas
-router.get("/planetas", feedController.getPosts);
+router.get("/:resource", feedController.getPosts);
 
 //POST /feed/post_planeta
 router.post(
-  "/post_planeta",
+  "/:resource",
   [
     body("namePlanet").trim().isLength({ min: 5 }),
     body("description").trim().isLength({ min: 5 }),
@@ -17,10 +17,11 @@ router.post(
   feedController.createPost
 );
 
-router.get("/planetas/:planetID", feedController.getPlanetByID);
-
-router.delete("/planetas/:planetID", feedController.deletePlanet);
-
-router.get("/search", feedController.searchPlanet);
+router.get("/:resource/:planetID", feedController.getPlanetByID);
+router.get(
+  "/:resource/search/:namePlanet?=namePlanet",
+  feedController.searchPlanet
+);
+router.delete("/:resource/:planetID", feedController.deletePlanet);
 
 module.exports = router;
