@@ -60,7 +60,20 @@ exports.getPlanetByID = (req, res, next) => {
 
 exports.deletePlanet = (req, res, next) => {
   const planetID = req.params.planetID;
-  Planet.findById(planetID).then();
+  Planet.findById(planetID)
+    .then((planet) => {
+      if (!planet) {
+        const error = new Error("Planeta não encontrado");
+        error.statusCode = 404;
+        throw error;
+      }
+      return Planet.findByIdAndRemove(planetID);
+    })
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({ message: "Planeta deletado com sucesso" });
+    })
+    .catch(errorHandler(err));
 };
 
 const errorHandler = (err) => {
