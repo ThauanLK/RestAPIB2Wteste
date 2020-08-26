@@ -83,3 +83,7 @@ exports.deletePlanet = async (req, res, next) => {
     errorHandler(err, next);
   }
 };
+
+exports.searchPlanet = (req,res,next) => {
+
+};

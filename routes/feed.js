@@ -21,4 +21,6 @@ router.get("/planetas/:planetID", feedController.getPlanetByID);
 
 router.delete("/planetas/:planetID", feedController.deletePlanet);
 
+router.get("/search", feedController.searchPlanet);
+
 module.exports = router;
