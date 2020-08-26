@@ -5,6 +5,7 @@ const Planet = require("../models/planets");
 const errorHandler = (err, next) => {
   if (!err.statusCode) {
     err.statusCode = 500;
+    err.message("Planeta não encontrado");
   }
   next(500);
 };
@@ -33,7 +34,7 @@ exports.createPost = async (req, res, next) => {
     description: descripiton,
     episode: episode,
   });
-  //Salvando o planeta no db
+  //Salvando o planeta no banco
   try {
     const planetWillSave = await planet.save();
     if (!errors.isEmpty) {
@@ -67,20 +68,18 @@ exports.getPlanetByID = async (req, res, next) => {
   }
 };
 
-exports.deletePlanet = (req, res, next) => {
+exports.deletePlanet = async (req, res, next) => {
   const planetID = req.params.planetID;
-  Planet.findById(planetID)
-    .then((planet) => {
-      if (!planet) {
-        const error = new Error("Planeta não encontrado");
-        error.statusCode = 404;
-        throw error;
-      }
-      return Planet.findByIdAndRemove(planetID);
-    })
-    .then((result) => {
-      console.log(result);
-      res.status(200).json({ message: "Planeta deletado com sucesso" });
-    })
-    .catch((err) => errorHandler(err, next));
+  try {
+    const planetWillDeletedfinded = await Planet.findById(planetID);
+    if (!planetWillDeletedfinded) {
+      const error = new Error("Planeta não encontrado");
+      error.statusCode = 404;
+      throw error;
+    }
+    const planetWillDeleted = await Planet.findByIdAndRemove(planetID);
+    res.status(200).json({ message: "Planeta deletado com sucesso" });
+  } catch (err) {
+    errorHandler(err, next);
+  }
 };
