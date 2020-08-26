@@ -2,11 +2,19 @@ const { validationResult } = require("express-validator/check");
 const Planet = require("../models/planets");
 
 //Listando os planetas
-exports.getPosts = async (req, res, next) => {
-  const data = await Planet.find({});
-  res.status(200).json({
-    data,
-  });
+exports.getPosts = (req, res, next) => {
+  Planet.find()
+    .then((planets) =>
+      res.status(200).json({
+        planets,
+      })
+    )
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(500);
+    });
 };
 
 exports.createPost = (req, res, next) => {
