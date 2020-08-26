@@ -24,18 +24,24 @@ exports.createPost = (req, res, next) => {
 
   //Salvando o planeta no db
   planet.save().then((result) => {
+    if (!errors.isEmpty) {
+      const errors = new Error(
+        "Erro de validação. Entrada de dados incorreta."
+      );
+      errors.statusCode = 422;
+      throw errors;
+    }
     res
       .status(201)
       .json({
         message: "Planeta adicionado com sucesso.",
         post: result,
       })
-      .catch((err) => console.log(err));
-    if (!errors.isEmpty) {
-      return res.status(422).json({
-        message: "Não foi possível adicionar o planeta",
-        errors: errors.array,
+      .catch((err) => {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(500);
       });
-    }
   });
 };

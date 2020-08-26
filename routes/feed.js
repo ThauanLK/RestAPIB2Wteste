@@ -4,11 +4,11 @@ const feedController = require("../controllers/feed");
 const router = express.Router();
 
 //GET /feed/posts
-router.get("/posts", feedController.getPosts);
+router.get("/planetas", feedController.getPosts);
 
 //POST /feed/post
 router.post(
-  "/post",
+  "/post_planeta",
   [
     body("namePlanet").trim().isLength({ min: 5 }),
     body("description").trim().isLength({ min: 5 }),
