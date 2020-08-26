@@ -19,4 +19,6 @@ router.post(
 
 router.get("/planetas/:planetID", feedController.getPlanetByID);
 
+router.delete("/planetas/:planetID");
+
 module.exports = router;

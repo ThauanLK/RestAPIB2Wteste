@@ -9,12 +9,7 @@ exports.getPosts = (req, res, next) => {
         planets,
       })
     )
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(500);
-    });
+    .catch(errorHandler(err));
 };
 
 exports.createPost = (req, res, next) => {
@@ -45,12 +40,7 @@ exports.createPost = (req, res, next) => {
         message: "Planeta adicionado com sucesso.",
         post: result,
       })
-      .catch((err) => {
-        if (!err.statusCode) {
-          err.statusCode = 500;
-        }
-        next(500);
-      });
+      .catch(errorHandler(err));
   });
 };
 
@@ -65,10 +55,17 @@ exports.getPlanetByID = (req, res, next) => {
       }
       res.status(200).json({ planet: planet });
     })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(500);
-    });
+    .catch(errorHandler(err));
+};
+
+exports.deletePlanet = (req, res, next) => {
+  const planetID = req.params.planetID;
+  Planet.findById(planetID).then();
+};
+
+const errorHandler = (err) => {
+  if (!err.statusCode) {
+    err.statusCode = 500;
+  }
+  next(500);
 };
