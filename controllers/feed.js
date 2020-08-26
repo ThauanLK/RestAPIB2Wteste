@@ -84,6 +84,12 @@ exports.deletePlanet = async (req, res, next) => {
   }
 };
 
-exports.searchPlanet = (req,res,next) => {
-
+exports.searchPlanet = async (req, res, next) => {
+  const searchParams = req.body.namePlanet;
+  try {
+    const planetSearched = await Planet.find({ namePlanet: searchParams });
+    res.status(200).json({ planetSearched });
+  } catch (err) {
+    errorHandler(err, next);
+  }
 };
