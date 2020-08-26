@@ -1,6 +1,14 @@
 const { validationResult } = require("express-validator");
 const Planet = require("../models/planets");
 
+//Funcao para o tratamento de erro.
+const errorHandler = (err, next) => {
+  if (!err.statusCode) {
+    err.statusCode = 500;
+  }
+  next(500);
+};
+
 //Listando os planetas
 exports.getPosts = async (req, res, next) => {
   try {
@@ -9,11 +17,11 @@ exports.getPosts = async (req, res, next) => {
       planets,
     });
   } catch (err) {
-    errorHandler(err);
+    errorHandler(err, next);
   }
 };
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
   const namePlanet = req.body.namePlanet;
   const descripiton = req.body.description;
@@ -25,9 +33,9 @@ exports.createPost = (req, res, next) => {
     description: descripiton,
     episode: episode,
   });
-
   //Salvando o planeta no db
-  planet.save().then((result) => {
+  try {
+    const planetWillSave = await planet.save();
     if (!errors.isEmpty) {
       const errors = new Error(
         "Erro de validação. Entrada de dados incorreta."
@@ -35,28 +43,28 @@ exports.createPost = (req, res, next) => {
       errors.statusCode = 422;
       throw errors;
     }
-    res
-      .status(201)
-      .json({
-        message: "Planeta adicionado com sucesso.",
-        post: result,
-      })
-      .catch((err) => errorHandler(err));
-  });
+    res.status(201).json({
+      message: "Planeta adicionado com sucesso.",
+      post: planetWillSave,
+    });
+  } catch (err) {
+    errorHandler(err, next);
+  }
 };
 
-exports.getPlanetByID = (req, res, next) => {
+exports.getPlanetByID = async (req, res, next) => {
   const planetID = req.params.planetID;
-  Planet.findById(planetID)
-    .then((planet) => {
-      if (!planet) {
-        const error = new Error("Planeta não encontrado");
-        error.statusCode = 404;
-        throw error;
-      }
-      res.status(200).json({ planet: planet });
-    })
-    .catch((err) => errorHandler(err));
+  try {
+    const planetfindedId = await Planet.findById(planetID);
+    if (!planetfindedId) {
+      const error = new Error("Planeta não encontrado");
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(200).json({ planet: planetfindedId });
+  } catch (err) {
+    errorHandler(err, next);
+  }
 };
 
 exports.deletePlanet = (req, res, next) => {
@@ -74,12 +82,5 @@ exports.deletePlanet = (req, res, next) => {
       console.log(result);
       res.status(200).json({ message: "Planeta deletado com sucesso" });
     })
-    .catch((err) => errorHandler(err));
-};
-
-const errorHandler = (err) => {
-  if (!err.statusCode) {
-    err.statusCode = 500;
-  }
-  next(500);
+    .catch((err) => errorHandler(err, next));
 };
