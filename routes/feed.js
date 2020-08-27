@@ -22,6 +22,24 @@ router.delete("/:resource/:planetID", feedController.deletePlanet);
 
 router.get("/:resource/result?", function (req, res, next) {
   const name = req.query.namePlanet;
+  const id = req.query.id;
+  if (id) {
+    Planet.findById(id)
+      .then((found) => {
+        if (!found) {
+          const error = new Error("Planeta não existente");
+          error.statusCode = 404;
+          throw error;
+        }
+        res.status(200).json({ message: "Planeta encontrado", planets: found });
+      })
+      .catch((err) => {
+        if (!err) {
+          err.statusCode = 500;
+        }
+        next(err);
+      });
+  }
   Planet.find({ $text: { $search: name } })
     .then((found) => {
       if (found.length == 0) {
