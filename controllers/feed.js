@@ -24,7 +24,7 @@ exports.getPosts = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
-  const namePlanet = req.body.namePlanet;
+  const namePlanet = req.body.namePlanet.toUpperCase();
   const descripiton = req.body.description;
   const episode = req.body.episode;
 

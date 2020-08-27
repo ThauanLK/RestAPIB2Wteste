@@ -25,7 +25,12 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(
     "mongodb+srv://tholiveira:Akmv1j1nY0WW3CRp@cluster0.69gso.gcp.mongodb.net/planets?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+    }
   )
   .then(app.listen(8080))
   .catch((err) => console.log(err));

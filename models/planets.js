@@ -6,6 +6,7 @@ const planetSchema = new Schema(
     namePlanet: {
       type: String,
       required: true,
+      index: true,
     },
     description: {
       type: String,
@@ -16,7 +17,9 @@ const planetSchema = new Schema(
       require: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, autoIndex: true, id: true }
 );
+
+planetSchema.index({ namePlanet: "text" });
 
 module.exports = mongoose.model("Planet", planetSchema);

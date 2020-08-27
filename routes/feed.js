@@ -19,11 +19,14 @@ router.post(
 );
 
 // router.get("/:resource/:planetID", feedController.getPlanetByID);
-router.get("/:resource/result", function (req, res, next) {
-  const name = req.query;
-  const nameSearched = Planet.find({ $text: { $search: name } });
-  console.log("REQ.Query.NAMEPLANET", name);
-  console.log("NAMESEARCHED", nameSearched);
+router.get("/:resource/result?", function (req, res, next) {
+  const name = req.query.namePlanet;
+  const nameSearched = Planet.find({ $text: { $search: name } })
+    .then(console.log())
+    .catch((err) => console.log(err));
+  console.log(
+    "//----------------------------------------------//-----------------------//"
+  );
 });
 router.delete("/:resource/:planetID", feedController.deletePlanet);
 
