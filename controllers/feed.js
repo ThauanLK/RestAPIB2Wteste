@@ -53,20 +53,21 @@ exports.createPost = async (req, res, next) => {
   }
 };
 
-exports.getPlanetByID = async (req, res, next) => {
-  const planetID = req.params.planetID;
-  try {
-    const planetfindedId = await Planet.findById(planetID);
-    if (!planetfindedId) {
-      const error = new Error("Planeta não encontrado");
-      error.statusCode = 404;
-      throw error;
-    }
-    res.status(200).json({ planet: planetfindedId });
-  } catch (err) {
-    errorHandler(err, next);
-  }
-};
+// exports.getPlanetByID = async (req, res, next) => {
+//   const planetID = req.params.planetID;
+//   try {
+//     const planetFindedById = await Planet.findById(planetID);
+//     if (!planetFindedById) {
+//       const error = new Error("Planeta não encontrado");
+//       error.statusCode = 404;
+//       throw error;
+//     }
+//     res.status(200).json({ planet: planetFindedById });
+//   } catch (err) {
+//     errorHandler(err, next);
+//     throw new Error(err);
+//   }
+// };
 
 exports.deletePlanet = async (req, res, next) => {
   const planetID = req.params.planetID;
@@ -84,12 +85,15 @@ exports.deletePlanet = async (req, res, next) => {
   }
 };
 
-exports.searchPlanet = async (req, res, next) => {
-  const namePlanet = req.query.namePlanet;
-  try {
-    const planetSearched = await Planet.find({ PlanetsFounded: namePlanet });
-    res.status(200).json({ planetSearched });
-  } catch (err) {
-    errorHandler(err, next);
-  }
-};
+// exports.searchPlanet = async (req, res, next) => {
+//   const nameSearched = req.query.namePlanet;
+//   console.log(nameSearched);
+//   try {
+//     const planetSearched = await Planet.find({
+//       $where: nameSearched,
+//     });
+//     res.status(200).json({ planetSearched });
+//   } catch (err) {
+//     errorHandler(err, next);
+//   }
+// };
