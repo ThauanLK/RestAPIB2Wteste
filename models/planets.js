@@ -20,6 +20,6 @@ const planetSchema = new Schema(
   { timestamps: true, autoIndex: true, id: true }
 );
 
-planetSchema.index({ namePlanet: "text" });
+planetSchema.index({ namePlanet: "text", id: "number" });
 
 module.exports = mongoose.model("Planet", planetSchema);
