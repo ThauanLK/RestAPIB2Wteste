@@ -9,7 +9,7 @@ router.get("/:resource", feedController.getPosts);
 
 //POST /feed/post_planeta
 router.post(
-  "/:resource",
+  "/:resource/post_planeta",
   [
     body("namePlanet").trim().isLength({ min: 5 }),
     body("description").trim().isLength({ min: 5 }),
@@ -22,11 +22,13 @@ router.post(
 router.get("/:resource/result?", function (req, res, next) {
   const name = req.query.namePlanet;
   const nameSearched = Planet.find({ $text: { $search: name } })
-    .then(console.log())
+    .then((founded) =>
+      res.status(201).json({
+        message: "Planeta Encontrado",
+        planet:  founded ,
+      })
+    )
     .catch((err) => console.log(err));
-  console.log(
-    "//----------------------------------------------//-----------------------//"
-  );
 });
 router.delete("/:resource/:planetID", feedController.deletePlanet);
 
