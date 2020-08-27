@@ -5,7 +5,6 @@ const Planet = require("../models/planets");
 const errorHandler = (err, next) => {
   if (!err.statusCode) {
     err.statusCode = 500;
-    err.message("Planeta não encontrado");
   }
   next(500);
 };
@@ -26,13 +25,13 @@ exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
   const namePlanet = req.body.namePlanet.toUpperCase();
   const descripiton = req.body.description;
-  const episode = req.body.episode;
+  const qnt_episodes = req.body.qnt_episodes;
 
   //criando um planeta novo
   const planet = new Planet({
     namePlanet: namePlanet,
     description: descripiton,
-    episode: episode,
+    qnt_episodes: qnt_episodes,
   });
   //Salvando o planeta no banco
   try {
@@ -53,22 +52,6 @@ exports.createPost = async (req, res, next) => {
   }
 };
 
-// exports.getPlanetByID = async (req, res, next) => {
-//   const planetID = req.params.planetID;
-//   try {
-//     const planetFindedById = await Planet.findById(planetID);
-//     if (!planetFindedById) {
-//       const error = new Error("Planeta não encontrado");
-//       error.statusCode = 404;
-//       throw error;
-//     }
-//     res.status(200).json({ planet: planetFindedById });
-//   } catch (err) {
-//     errorHandler(err, next);
-//     throw new Error(err);
-//   }
-// };
-
 exports.deletePlanet = async (req, res, next) => {
   const planetID = req.params.planetID;
   try {
@@ -85,15 +68,24 @@ exports.deletePlanet = async (req, res, next) => {
   }
 };
 
-// exports.searchPlanet = async (req, res, next) => {
-//   const nameSearched = req.query.namePlanet;
-//   console.log(nameSearched);
-//   try {
-//     const planetSearched = await Planet.find({
-//       $where: nameSearched,
-//     });
-//     res.status(200).json({ planetSearched });
-//   } catch (err) {
-//     errorHandler(err, next);
-//   }
-// };
+exports.searchPlanet = function (req, res, next) {
+  const name = req.query.namePlanet;
+  Planet.find({ $text: { $search: name } })
+    .then((found) => {
+      if (found.length == 0) {
+        const error = new Error("Planeta não existente");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({
+        message: "Planeta Encontrado",
+        planets: found,
+      });
+    })
+    .catch((err) => {
+      if (!err) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};

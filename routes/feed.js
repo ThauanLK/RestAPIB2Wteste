@@ -18,19 +18,20 @@ router.post(
   feedController.createPost
 );
 
-// router.get("/:resource/:planetID", feedController.getPlanetByID);
+router.delete("/:resource/:planetID", feedController.deletePlanet);
+
 router.get("/:resource/result?", function (req, res, next) {
   const name = req.query.namePlanet;
   Planet.find({ $text: { $search: name } })
-    .then((founded) => {
-      if (founded.length == 0) {
+    .then((found) => {
+      if (found.length == 0) {
         const error = new Error("Planeta não existente");
         error.statusCode = 404;
         throw error;
       }
       res.status(200).json({
         message: "Planeta Encontrado",
-        planets: founded,
+        planets: found,
       });
     })
     .catch((err) => {
@@ -40,6 +41,5 @@ router.get("/:resource/result?", function (req, res, next) {
       next(err);
     });
 });
-router.delete("/:resource/:planetID", feedController.deletePlanet);
 
 module.exports = router;

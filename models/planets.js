@@ -12,7 +12,7 @@ const planetSchema = new Schema(
       type: String,
       require: true,
     },
-    episode: {
+    qnt_episodes: {
       type: String,
       require: true,
     },
